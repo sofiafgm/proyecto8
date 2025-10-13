@@ -4,6 +4,7 @@ const db = new sqlite3.Database('./db/proyecto8.sqlite');
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS mascotas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    foto TEXT,
     nombre TEXT,
     especie TEXT,
     raza TEXT,

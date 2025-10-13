@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 
 // GET all
 router.get('/', auth, (req, res) => {
-  db.all('SELECT * FROM mascotas', [], (err, rows) => {
+  db.all('SELECT * FROM usuarios', [], (err, rows) => {
     if (err) return res.status(500).send(err.message);
     res.json(rows);
   });
@@ -15,24 +15,24 @@ router.get('/', auth, (req, res) => {
 router.get('/:id', (req, res) => {
     const { id } = req.params;
   
-    db.get(`SELECT * FROM mascotas WHERE id = ?`, [id], (err, row) => {
+    db.get(`SELECT * FROM usuarios WHERE id = ?`, [id], (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
-      if (!row) return res.status(404).json({ error: 'mascota no encontrado' });
+      if (!row) return res.status(404).json({ error: 'usuario no encontrado' });
       res.json(row);
     });
   });
 
 // POST
 router.post('/', auth, (req, res) => {
-  const { foto, nombre, especie, raza, edad, estado_salud, descripcion } = req.body;
+  const { nombre, email, password } = req.body;
 
   db.run(
-    `INSERT INTO mascotas (foto, nombre, especie, raza, edad, estado_salud, descripcion) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [foto, nombre, especie, raza, edad, estado_salud, descripcion],
+    `INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)`,
+    [ nombre, email, password, edad, estado_salud, descripcion],
     function (err) {
       if (err) return res.status(500).send(err.message);
       db.get(
-        `SELECT * FROM mascotas WHERE id = ?`,
+        `SELECT * FROM usuarios WHERE id = ?`,
         [this.lastID],
         (err, row) => {
           if (err) return res.status(500).send(err.message);
@@ -45,10 +45,10 @@ router.post('/', auth, (req, res) => {
 
 // PUT
 router.put('/:id', auth, (req, res) => {
-  const { foto, nombre, especie, raza, edad, estado_salud, descripcion } = req.body;
+  const { nombre, email, password } = req.body;
   db.run(
-    `UPDATE mascotas SET foto=?, nombre=?, especie=?, raza=?, edad=?, estado_salud=?, descripcion=? WHERE id=?`,
-    [foto,nombre, especie, raza, edad, estado_salud, descripcion, req.params.id],
+    `UPDATE usuarios SET nombre=?, email=?, password=? WHERE id=?`,
+    [foto,nombre, email, password, req.params.id, req.params.email, req.params.password],
     function (err) {
       if (err) return res.status(500).send(err.message);
       res.json({ changes: this.changes });
@@ -58,7 +58,7 @@ router.put('/:id', auth, (req, res) => {
 
 // DELETE
 router.delete('/:id', auth, (req, res) => {
-  db.run(`DELETE FROM mascotas WHERE id=?`, [req.params.id], function (err) {
+  db.run(`DELETE FROM usuarios WHERE id=?`, [req.params.id], function (err) {
     if (err) return res.status(500).send(err.message);
     res.json({ changes: this.changes });
   });

@@ -15,7 +15,8 @@ const adoptantesRoutes = require('./routes/adoptantes');
 const adopcionesRoutes = require('./routes/adopciones');
 const donadoresRoutes = require('./routes/donadores');
 const donacionesRoutes = require('./routes/donaciones');
-
+const resgistroRoutes = require('./routes/registro');
+const usuariosRoutes = require('./routes/usuarios');
 
 app.use(express.json());
 app.use(cors());
@@ -25,6 +26,8 @@ app.use('/adoptantes', adoptantesRoutes);
 app.use('/adopciones', adopcionesRoutes);
 app.use('/donadores', donadoresRoutes);
 app.use('/donaciones', donacionesRoutes);
+app.use('/registro', resgistroRoutes);
+app.use('/usuarios', usuariosRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
